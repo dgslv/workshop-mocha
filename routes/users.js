@@ -1,0 +1,108 @@
+var express = require('express');
+var router = express.Router();
+
+const {
+  getUser,
+  getUsers,
+  newUser,
+  removeUser,
+  updateUser
+} = require('../services/users');
+
+/* GET users listing. */
+router.get('/', function(req, res) {
+  getUsers()
+    .then((users) => {
+      res.json({
+        success: true,
+        data: users
+      })
+    })
+    .catch(e => {
+      res.json({
+        success: false,
+        message: 'Erro ocorrido: ' + e
+      })
+    })
+});
+
+router.get('/:id', (req, res) => {
+  const user = req.params.id;
+
+  getUser(user)
+    .then((user) => {
+      res.json({
+        success: true,
+        user
+      })
+    })
+    .catch(e => {
+      res.json({
+        success: false,
+        message: 'Erro ocorrido ' + e
+      })
+    })
+})
+
+router.post('/', (req, res) => {
+  const user = {
+    name: req.body.name,
+    age: req.body.age
+  }
+
+  newUser(user)
+    .then((userCreated) => {
+      res.json({
+        success: true,
+        data: userCreated
+      })
+    })
+    .catch(e => {
+      res.json({
+        success: false,
+        message: 'Erro ocorrido ' + e
+      })
+    })
+})
+
+router.put('/:id', (req, res) => {
+  const user = {
+    _id: req.params.id,
+    name: req.body.name,
+    age: req.body.age
+  }
+
+  updateUser(user._id, user)
+    .then((userUpdated) => {
+      res.json({
+        success: true,
+        data: userUpdated
+      })
+    })
+    .catch(e => {
+      res.json({
+        success: false,
+        message: 'Erro ocorrido ' + e
+      })
+    })
+})
+
+router.delete('/:id' , (req, res) => {
+  const user = req.params.id;
+
+  removeUser(user)
+    .then((data) => {
+      res.json({
+        success: true,
+        data
+      })
+    })
+    .catch(e => {
+      res.json({
+        success: false,
+        message: 'Erro ocorrido ' + e
+      })
+    })
+})
+
+module.exports = router;
