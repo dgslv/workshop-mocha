@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const {
+const {     
     calculatePrice
 } = require('../../sources/functions');
 
