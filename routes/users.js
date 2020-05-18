@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const {
   getUser,
@@ -10,20 +10,11 @@ const {
 } = require('../services/users');
 
 /* GET users listing. */
-router.get('/', function(req, res) {
-  getUsers()
-    .then((users) => {
-      res.json({
-        success: true,
-        data: users
-      })
-    })
-    .catch(e => {
-      res.json({
-        success: false,
-        message: 'Erro ocorrido: ' + e
-      })
-    })
+router.get('/', function (req, res) {
+  res.json({
+    success: true,
+    users: [{ age: 24, name: 'Diego' }]
+  })
 });
 
 router.get('/:id', (req, res) => {
@@ -50,19 +41,9 @@ router.post('/', (req, res) => {
     age: req.body.age
   }
 
-  newUser(user)
-    .then((userCreated) => {
-      res.json({
-        success: true,
-        data: userCreated
-      })
-    })
-    .catch(e => {
-      res.json({
-        success: false,
-        message: 'Erro ocorrido ' + e
-      })
-    })
+  res.json({
+    success: true
+  })
 })
 
 router.put('/:id', (req, res) => {
@@ -87,7 +68,7 @@ router.put('/:id', (req, res) => {
     })
 })
 
-router.delete('/:id' , (req, res) => {
+router.delete('/:id', (req, res) => {
   const user = req.params.id;
 
   removeUser(user)

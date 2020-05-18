@@ -1,21 +1,23 @@
 const expect = require('chai').expect;
 const request = require('supertest');
+const app = require('../../../app');
 const mongoose = require('mongoose');
 
-const app = require('../../../app');
-const {    
+const {
     connect,
     close
 } = require('../../../db/db');
 
-describe('Testing get user', () => {
-    before(function (done) {
-        this.enableTimeouts(false)
+describe('Testing GET /users route', function () {
+    this.timeout(10000);
+
+    beforeEach(function (done) {
+        this.enableTimeouts(false);
         connect()
             .then(() => done())
             .catch((err) => done(err));
     })
-    after((done) => {
+    afterEach((done) => {
         mongoose.models = {};
         mongoose.modelSchemas = {};
         close()
@@ -23,33 +25,34 @@ describe('Testing get user', () => {
             .catch((err) => done(err));
     })
 
-    it('Gets a user with an id passed', (done) => {
-        const _id = '5d7aaa38ff27bfef1853921f';
-        request(app).get('/users/' + _id)
-            .send()
-            .then((res) => {
-                const body = res.body.user;
-                expect(body).to.have.deep.members([{
-                    __v: 0,
-                    _id: body[0]._id,
-                    name: 'Diego',
-                    age: 23
-                }])
-                done();
+    it('Should get status 200 and success true', (done) => {
+        request(app)
+            .get('/users')
+            .then((response) => {
+                const body = response.body;
+                expect(response).to.have.property('statusCode').equal(200);
+                expect(body).to.have.property('success').equal(true);
+                done()
             })
             .catch(e => {
+                console.log(e)
                 done(e)
             })
     })
 
-    it('Get users', (done) => {
-        request(app).get('/users')
-            .send()
-            .then((res) => {
-                expect(res.body.data).to.be.a('array')
+    it('users should have property name and age', (done) => {
+        request(app)
+            .get('/users')
+            .then(response => {
+                const body = response.body;
+                expect(body).to.have.property('users').to.be.an('Array');
+                expect(body).to.have.property('users').to.be.an('Array').to.have.length.greaterThan(0);
+                const users = response.body.users;
+                expect(users).to.be.an('Array').to.deep.include({ age: 24, name: 'Diego' });
                 done();
             })
             .catch(e => {
+                console.log(e)
                 done(e)
             })
     })

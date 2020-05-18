@@ -12,13 +12,13 @@ const {
 } = require('../../../db/db');
 
 describe('Testing post user', () => {
-    before(function (done) {
-        this.enableTimeouts(false)
+    beforeEach(function (done) {
+        this.enableTimeouts(false);
         connect()
             .then(() => done())
             .catch((err) => done(err));
     })
-    after((done) => {
+    afterEach((done) => {
         mongoose.models = {};
         mongoose.modelSchemas = {};
         close()
@@ -26,17 +26,17 @@ describe('Testing post user', () => {
             .catch((err) => done(err));
     })
 
-    it('Posts a user called Diego with age 23', (done) => {
-        request(app).post('/users')
+    it('Posts a user called Diego with age 24', (done) => {
+        request(app)
+            .post('/users')
             .send({
                 name: 'Diego',
-                age: 23
+                age: 24
             })
-            .then((res) => {
-                const body = res.body.data;
-                expect(body).to.contain.property('_id');
-                expect(body).to.contain.property('name');
-                expect(body).to.contain.property('age');
+            .then((response) => {
+                expect(response).to.have.property('statusCode').equal(200);
+                const body = response.body;
+                expect(body).to.have.own.property('success').equal(true);
                 done();
             })
             .catch(e => {

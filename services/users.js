@@ -9,9 +9,11 @@ const mongoose = require('mongoose');
  * @returns {Promise}
  */
 const getUser = (user) => {
-    return userModel.find({
-        _id: new mongoose.Types.ObjectId(user)
-    }).exec();
+    return userModel
+        .findOne({
+            _id: new mongoose.Types.ObjectId(user)
+        })
+        .lean();
 }
 
 /**
@@ -20,7 +22,9 @@ const getUser = (user) => {
  * @returns {Promise}
  */
 const getUsers = () => {
-    return userModel.find().exec();
+    return userModel
+        .find()
+        .lean();
 }
 
 

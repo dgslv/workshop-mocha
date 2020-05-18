@@ -1,51 +1,56 @@
 const expect = require('chai').expect;
-const {     
-    calculatePrice
+
+const {
+    calculatePrice,
 } = require('../../sources/functions');
 
-const items = [ 
-    {
-        title: 'Apple',
-        price: 5
-    },
-    {
-        title: 'Pineapple',
-        price: 8
-    },
-    {
-        title: 'Orange',
-        price: 2
-    }
+const bolacha = {
+    price: 10
+}
+
+const carne = {
+    price: 25
+}
+
+const produtos = [
+    bolacha,
+    carne,
 ]
 
-const basket = [
-    {
-        title: 'Apple',
-        price: 5
-    }
+const maca = {
+    price: 5
+}
+
+const cart2 = [
+    ...produtos,
+    maca,
+    { price: 30 },
+    { price: 100 },
+    { price: 77 }
 ]
 
-const basket_two = [
-    {
-        title: 'Pineapple',
-        price: 8
-    },
-    {
-        title: 'Orange',
-        price: 2
-    }
-]
-describe('Testing functions', () => {
-    it ('should return 15', () => {
-        expect(calculatePrice(items)).to.equal(15)
+describe('Testing calculate price', () => {
+    it('should return price 10', done => {
+        const price = calculatePrice([bolacha]);
+        expect(price).to.be.equal(10)
+        done();
     })
 
-    it ('should return 5', () => {
-        expect(calculatePrice(basket)).to.equal(5)
+    it('should return price 25', done => {
+        const price = calculatePrice([carne]);
+        expect(price).to.be.equal(25)
+        done();
     })
 
-    it ('should return 10', () => {
-        expect(calculatePrice(basket_two)).to.equal(10)
+    it('should return price 35', done => {
+        const price = calculatePrice(produtos);
+        expect(price).to.be.equal(35)
+        done();
     })
 
+    it('should return price 147', done => {
+        const price = calculatePrice(cart2);
+        expect(price).to.be.equal(247)
+        done();
+    })
 })
