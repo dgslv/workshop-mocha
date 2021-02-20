@@ -13,7 +13,7 @@
     "express": "~4.13.1",
     "mocha": "^6.2.0",
     "mockgoose": "^8.0.2",
-    "mongoose": "^5.7.0",
+    "mongoose": "^5.7.5",
     "nodemon": "*",
     "supertest": "^4.0.2"
   }
